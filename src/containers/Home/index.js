@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Layout, Menu, Card, Col, Row, Statistic } from "antd";
-import { Column, Pie, Line, TinyColumn, TinyArea, TinyLine } from "@ant-design/charts";
+import { Pie, Line, TinyColumn, TinyArea, TinyLine } from "@ant-design/charts";
 import {
-  DesktopOutlined,
   PieChartOutlined,
-  FileOutlined,
-  TeamOutlined,
-  UserOutlined,
-  ArrowUpOutlined,
-  ArrowDownOutlined
 } from "@ant-design/icons";
 
 const Home = () => {
@@ -84,7 +78,6 @@ const Home = () => {
     smooth: true,
   };
 
-  var dataTinyColumn2 = [274, 337];
 
   var dataTinyColumn = [274, 337, 81, 497, 666, 219, 269, 200, 233, 546, 234, 86, 94, 105];
   var configTinyColumn = {
