@@ -1,14 +1,50 @@
-import React, { useState } from "react";
-import { Layout, Menu, Card, Col, Row, Statistic } from "antd";
-import { Pie, Line, TinyColumn, TinyArea, TinyLine } from "@ant-design/charts";
-import {
-  PieChartOutlined,
-  BarChartOutlined,
-} from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Layout, Menu, Table } from "antd";
+import { Line } from "@ant-design/charts";
+import { PieChartOutlined, BarChartOutlined } from "@ant-design/icons";
+import { Link, useRouteMatch, useParams } from "react-router-dom";
 
-const Home = () => {
+const Category = () => {
   const [collapsed, setCollapsed] = useState(false);
+
+  const match = useRouteMatch();
+  const url_param = useParams();
+
+  useEffect(() => {
+    console.log(match);
+    console.log(url_param);
+  }, [match, url_param]);
+
+  const category_data = [
+    {
+      name: "Access to daylight",
+      param: "AccessToDayLight",
+    },
+    {
+      name: "Family zone in patient room",
+      param: "FamilyZoneInPatientRoom",
+    },
+    {
+      name: "Indoor lighting",
+      param: "IndoorLighting",
+    },
+    {
+      name: "Noise reducing finishes",
+      param: "NoiseReducingFinishes",
+    },
+    {
+      name: "Single bedroom",
+      param: "SingleBedroom",
+    },
+    {
+      name: "Views of nature",
+      param: "ViewsOfNature",
+    },
+  ];
+
+  const category = category_data.findIndex(
+    (obj) => obj.param === url_param.category
+  );
 
   var dataAge = [
     {
@@ -297,51 +333,6 @@ const Home = () => {
     },
   ];
 
-  var dataPie = [
-    {
-      type: "ชาย",
-      value: 125,
-    },
-    {
-      type: "หญิง",
-      value: 175,
-    },
-  ];
-  var dataPie2 = [
-    {
-      type: "ภาคเหนือ",
-      value: 80,
-    },
-    {
-      type: "ภาคใต้",
-      value: 65,
-    },
-    {
-      type: "ภาคตะวันออก",
-      value: 12,
-    },
-    {
-      type: "ภาคตะวันออกเฉียงเหนือ",
-      value: 15,
-    },
-    {
-      type: "ภาคกลาง",
-      value: 125,
-    },
-  ];
-
-  var configPie = {
-    appendPadding: 10,
-    angleField: "value",
-    colorField: "type",
-    radius: 0.8,
-    label: {
-      type: "outer",
-      content: "{name} {percentage}",
-    },
-    interactions: [{ type: "pie-legend-active" }, { type: "element-active" }],
-  };
-
   var configLine = {
     padding: "auto",
     xField: "age",
@@ -350,39 +341,60 @@ const Home = () => {
     smooth: true,
   };
 
-
-  var dataTinyColumn = [274, 337, 81, 497, 666, 219, 269, 200, 233, 546, 234, 86, 94, 105];
-  var configTinyColumn = {
-    height: 64,
-    autoFit: true,
-    tooltip: {
-      customContent: function customContent(x, data) {
-        var _data$, _data$$data;
-        return 'count'
-          .concat(x, ': ')
-          .concat(
-            (_data$ = data[0]) === null || _data$ === void 0
-              ? void 0
-              : (_data$$data = _data$.data) === null || _data$$data === void 0
-                ? void 0
-                : _data$$data.y.toFixed(2),
-          );
-      },
+  const columns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
     },
-  };
+    {
+      title: "Age",
+      dataIndex: "age",
+      key: "age",
+    },
+    {
+      title: "Min",
+      dataIndex: "min",
+      key: "min",
+    },
+    {
+      title: "Max",
+      dataIndex: "max",
+      key: "max",
+    },
+    {
+      title: "Avg",
+      dataIndex: "avg",
+      key: "avg",
+    },
+  ];
 
-  var configTinyAres = {
-    height: 64,
-    autoFit: true,
-    smooth: true,
-    areaStyle: { fill: '#d6e3fd' },
-  };
-
-  var configTinyLine = {
-    height: 64,
-    autoFit: true,
-    smooth: true,
-  };
+  const data = [
+    {
+      key: "1",
+      name: "John Brown",
+      age: 32,
+      min: 0.05,
+      max: 1.0,
+      avg: 0.29,
+    },
+    {
+      key: "2",
+      name: "Jim Green",
+      age: 42,
+      min: 0.05,
+      max: 1.0,
+      avg: 0.574,
+    },
+    {
+      key: "3",
+      name: "Joe Black",
+      age: 32,
+      min: 0.01,
+      max: 1.0,
+      avg: 0.39,
+    },
+  ];
 
   return (
     <>
@@ -395,11 +407,9 @@ const Home = () => {
             onCollapse={() => setCollapsed(!collapsed)}
             theme="light"
           >
-            <Menu defaultSelectedKeys={["1"]} mode="inline">
+            <Menu defaultSelectedKeys={url_param.category} mode="inline">
               <Menu.Item key="1" icon={<PieChartOutlined />}>
-                <Link to="/">
-                  DashBoard
-                </Link>
+                <Link to="/">DashBoard</Link>
               </Menu.Item>
               <Menu.SubMenu
                 key="2"
@@ -434,46 +444,14 @@ const Home = () => {
             </Menu>
           </Layout.Sider>
           <Layout.Content className="p-5">
-            <div className="site-card-wrapper">
-              <Row gutter={16}>
-                <Col span={6}>
-                  <Card bordered={false}>
-                    <Statistic title="All Users" value={42} />
-                    <TinyColumn data={dataTinyColumn} {...configTinyColumn} />
-                  </Card>
-                </Col>
-                <Col span={6}>
-                  <Card bordered={false}>
-                    <Statistic title="Active Users" value={6} />
-                    <TinyArea data={dataTinyColumn} {...configTinyAres} />
-                  </Card>
-                </Col>
-                <Col span={6}>
-                  <Card bordered={false}>
-                    <Statistic title="Form Submit" value={360} />
-                    <TinyColumn data={dataTinyColumn} {...configTinyColumn} />
-                  </Card>
-                </Col>
-                <Col span={6}>
-                  <Card bordered={false}>
-                    <Statistic title="Recenly Form" value={100} />
-                    <TinyLine data={dataTinyColumn} {...configTinyLine} />
-                  </Card>
-                </Col>
-              </Row>
-            </div>
-            <div className="bg-white p-6 my-4">
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Pie data={dataPie} {...configPie} />
-                </Col>
-                <Col span={12}>
-                  <Pie data={dataPie2} {...configPie} />
-                </Col>
-              </Row>
+            <div className=" text-2xl p-6 my-4">
+              {category_data[category].name}
             </div>
             <div className="bg-white p-6 my-4">
               <Line data={dataAge} {...configLine} />
+            </div>
+            <div className="bg-white p-6 my-4">
+              <Table columns={columns} dataSource={data} />
             </div>
           </Layout.Content>
         </Layout>
@@ -485,4 +463,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Category;
